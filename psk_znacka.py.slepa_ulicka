@@ -1,0 +1,86 @@
+# -*- coding: utf-8 -*-
+#Jediná etáž ve věku A se zakmeněním 7-10
+#10100 + Min((A+19),  179) div 20
+#Jediná etáž ve věku A se zakmeněním 4-6
+#10000 + Min((A+19),  179) div 20
+#Jediná etáž ve věku A se zakmeněním 1-3
+#20000 + Min((A+19),  179) div 20
+#Dvě etáže, etáž se zakmeněním 7-10 ve věku A a další etáž se zakmeněním 1-3 ve věku B
+#pokud Min((A+19),  179) div 20 <> Min((B+19, 179):   20000 + 10*(Min((A+19),  179) div 20) + Min((B+19),  179) div 20
+#pokud Min((A+19),  179) div 20 = Min((B+19, 179):
+#10100 + Min((A+19),  179) div 20
+#Dvě etáže, etáž se zakmeněním 7-10 ve věku A a další etáž se zakmeněním 4-10 ve věku B
+#pokud Min((A+19),  179) div 20 <> Min((B+19, 179):   10000 + 10*(Min((A+19),  179) div 20) + Min((B+19),  179) div 20
+#pokud Min((A+19),  179) div 20 = Min((B+19, 179):
+#10100 + Min((A+19),  179) div 20
+#Dvě etáže, obě etáže se zakmeněním 4-6, mladší ve věku A a starší  B
+#pokud Min((A+19),  179) div 20 <> Min((B+19, 179):   10000 + 10*(Min((A+19),  179) div 20) + Min((B+19),  179) div 20
+#pokud Min((A+19),  179) div 20 = Min((B+19, 179):
+#10100 + Min((A+19),  179) div 20
+#Dvě etáže, etáž se zakmeněním 4-6 ve věku A a druhá etáž se zakmeněním 1-3 ve věku B
+#25000 + 10*(Min((A+19),  179) div 20) + Min((B+19),  179) div 20
+#Dvě etáže, obě etáže se zakmeněním 1-3, mladší ve věku A a starší  B
+#26000 + 10*(Min((A+19),  179) div 20) + Min((B+19),  179) div 20
+#Více než dvě etáže
+#použije se značka určená pomocí výše uvedených pravidel použitím hodnot pro dvě nejstarší etáže; v případě, že dvě nejstarší etáže mají obě zakmenění 1-3, pak se použije nejstarší etáž a nejstarší etáž se zakmeněním 4-10, pokud taková existuje
+
+def psk_znacka(element_psk):
+    """dopocita chybejici znacku k psk
+    :param element_psk: etree element s psk
+    """
+    #if not element_psk['PSK_ZNACKA']:
+    etaze = element_psk.xpath('ETZ')
+
+    etaze_2 = {etaz.get('ETAZ'):etaz.attrib for etaz in psk.xpath('ETZ')}
+    pocet_etazi = len(etaze_2)
+
+    if len(etaze) == 1:
+        etaz = etaze[0]
+        zakmeneni = int(etaz.get('ZAKM'))
+        vekova_trida = min((int(etaz.get('VEK')) + 20), 179) /20
+        return(vekova_trida + (
+                10100 if 7 <= zakmeneni <= 10
+                else 10000 if 4 <= zakmeneni <= 6
+                else 20000 if 1 <= zakmeneni <= 3
+                else 0))
+
+    elif len(etaze) == 2: #dve etaze
+        etz_info = [(etaz.get('ZAKM'), etaz.get('VEK')) for etaz in etaze]
+
+        if 7<= etz_info[0][0] <= 10 and 1<= etz_info[1][0] <= 3:
+            vekova_trida_a = min((int(etz_info[0][1]) + 20), 179) /20
+            vekova_trida_a = min((int(etz_info[1][1]) + 20), 179) /20
+            if vekova_trida_a != vekova_trida_b:
+                return(20000 + (10 * vekova_trida_a) + vekova_trida_b)
+            else:
+                return(10100 + vekova_trida_a)
+
+
+        elif 7<= etz_info[1][0] <= 10 and 1<= etz_info[0][0] <= 3:
+            vekova_trida_a = min((int(etz_info[1][1]) + 20), 179) /20
+            vekova_trida_a = min((int(etz_info[0][1]) + 20), 179) /20
+            if vekova_trida_a != vekova_trida_b:
+                return(20000 + (10 * vekova_trida_a) + vekova_trida_b)
+            else:
+                return(10100 + vekova_trida_a)
+
+
+        if 7<= etz_info[0][0] <= 10 and 4<= etz_info[1][0] <= 10:
+            vekova_trida_a = min((int(etz_info[0][1]) + 20), 179) /20
+            vekova_trida_a = min((int(etz_info[1][1]) + 20), 179) /20
+            if vekova_trida_a != vekova_trida_b:
+                return(10000 + (10 * vekova_trida_a) + vekova_trida_b)
+            else:
+                return(10100 + vekova_trida_a)
+
+
+        elif 7<= etz_info[1][0] <= 10 and 4<= etz_info[0][0] <= 10:
+            vekova_trida_a = min((int(etz_info[1][1]) + 20), 179) /20
+            vekova_trida_a = min((int(etz_info[0][1]) + 20), 179) /20
+            if vekova_trida_a != vekova_trida_b:
+                return(10000 + (10 * vekova_trida_a) + vekova_trida_b)
+            else:
+                return(10100 + vekova_trida_a)
+
+
+    return(kod)

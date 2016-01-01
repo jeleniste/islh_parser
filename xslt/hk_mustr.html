@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta content="text/html; charset=utf-8" />
+<title>Hospodářská kniha</title>
+<style>
+
+
+h2{
+  background-color: #DDD; 
+  margin-bottom: 0px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 5px;
+  padding-left: 20px;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  font-family:Helvetica;
+  font-size: 95%;
+}
+
+table {
+   /*border-collapse: collapse;*/
+   width: 100%;
+   font-family:Helvetica;
+   font-size:80%;
+}
+
+table.lhc {
+   border-collapse: collapse;
+}
+
+th, td {
+    padding: 3px;
+}
+th {
+    background-color: #AAA;
+    color: white;
+    vertical-align: top;
+    text-align: center;
+}
+th.field-name{
+   text-align: left;
+   background-color: #343;
+}
+
+tfoot td{
+    background-color: #AAA;
+    color: white;
+    font-weight: bold;
+}
+
+div.dreviny{
+   margin-left:25px;
+}
+
+div.porostni-skupina{
+   margin-left:15px;
+}
+div.porost{
+   margin-left:15px;
+}
+
+div.etaz{
+   margin-top:5px;
+}
+
+table.lhc td {
+   padding-bottom=1px;
+   padding-top=1px;
+}
+
+table.por th, td {
+   vertical-align:top;
+}
+
+table.psk th, td {
+   vertical-align:top;
+}
+
+
+/*tr:nth-child(even){background-color: #f2f2f2}*/
+tr{background-color: #DDD}
+</style>
+</head>
+<body>
+   <div id="hospodarska-kniha">
+      <table class="lhc">
+	 <colgroup>
+	    <col width="10%"/>
+	    <col width="90%"/>
+	 </colgroup>
+	 <tbody>
+	    <tr>
+	       <th class="field-name">Kód LHC:</th>
+	       <td class="field-body"><strong>${lhc_kod}</strong></td>
+	    </tr>
+	    <tr>
+	       <th class="field-name">Název LHC:</th>
+	       <td class="field-body"><strong>${lhc_naz}</strong></td>
+	    </tr>
+	    <tr>
+	       <th class="field-name">Platnost od:</th>
+	       <td class="field-body"><strong>${platnost_od}-${platnost_do}</strong></td>
+	    </tr>
+	 </tbody>
+      </table>
+   </div>
+   <div class="porost">
+      <table class="por">
+	 <colgroup>
+	    <col width="15%"/>
+	    <col width="15%"/>
+	    <col width="20%"/>
+	    <col width="15%"/>
+	    <col width="25%"/>
+	 </colgroup>
+	 <tbody>
+	    <tr>
+	       <td>Oddělení: <strong>${ODD}</strong></td>
+	       <td>Dílec: <strong>${DIL}</strong></td>
+	       <td>plocha: <strong>${plocha_dil}</strong></td>
+	       <td>Porost: <strong>${POR}</strong></td>
+	       <td>plocha: <strong>${plocha_por}</strong></td>
+	    </tr>
+	    <tr>
+	       <td colspan="2">Lesní oblast: <strong>${LO}</strong></td>
+	       <td>OLH: <strong>${OLH}</strong></td>
+	       <td colspan="2">Pásmo ohrožení: <strong>${pasmo}</strong></td>
+	    </tr>
+	    <tr>
+	       <td colspan="3">LS(LZ): <strong>${LS}</strong></td>
+	       <td colspan="2">Zvl. statut: <strong>${zvl_stat}</strong></td>
+	    </tr>
+	    <tr>
+	       <td colspan="2">kategorie:<br/>${kategorie}</td>
+	       <td colspan="3">Popis porostu:<br/>${popis_por}</td>
+	    </tr>
+	 </tbody>
+      </table>
+   </div>
+   <div class="porostni-skupina">
+      <h2>Porostní skupina</h2>
+      <table class="psk">
+	 <colgroup>
+	    <col width="20%" />
+	    <col width="20%" />
+	    <col width="20%" />
+	    <col width="40%" />
+	 </colgroup>
+	 <tbody>
+	    <tr>
+	       <td>PSK: <strong>${PSK}</strong></td>
+	       <td>Plocha: <strong>{PSK_P}</strong></td>
+	       <td>Lesní typ: <strong>${LT}</strong></td>
+	       <td>Lesní úřad: <strong>${lesni_urad}</strong></td>
+	    </tr>
+	    <tr>
+	       <td colspan="2">KU: <strong>${kod_ku}/${katastr_uzemi}</strong></td>
+	       <td colspan="2">Lesní vegetační stupeň: <strong>${LVS}</strong></td>
+	    </tr>
+	    <tr>
+	       <td colspan="4">Popis psk: ${PSK_TEXT}</td>
+	    </tr>
+	 </tbody>
+      </table>
+      <div class="etaz">
+	 <table class="etaz">
+	    <colgroup>
+	       <col width="9%" />
+	       <col width="16%" />
+	       <col width="14%" />
+	       <col width="19%" />
+	       <col width="23%" />
+	       <col width="19%" />
+	    </colgroup>
+	    <tbody>
+	       <tr>
+		  <td>Etáž:</br><strong>${ETZ}</strong></td>
+		  <td>Skut. plocha:</br><strong>${plocha_etz}</strong></td>
+		  <td>Kód majetku:</br><strong>${MAJ_KOD}</strong></td>
+		  <td>Model. těž. %:</br><strong>${model_tez_proc}</strong></td>
+		  <td>Obmýtí/Obnov.doba:</br><strong>${obmyti}/${obn_doba}</strong></td>
+		  <td>% mel. a zpevn. drev.:</br><strong>{proc_mel}</strong></td>
+	       </tr>
+	    </tbody>
+	 </table>
+	 <div class="dreviny" style="overflow-x:auto;">
+	    <table class="dreviny">
+	       <colgroup>
+		  <col width="4%" />
+		  <col width="2%" />
+		  <col width="4%" />
+		  <col width="3%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="2%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="2%" />
+		  <col width="1%" />
+		  <col width="2%" />
+		  <col width="2%" />
+		  <col width="3%" />
+		  <col width="3%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="3%" />
+		  <col width="4%" />
+		  <col width="3%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="4%" />
+		  <col width="3%" />
+		  <col width="2%" />
+		  <col width="5%" />
+		  <col width="4%" />
+	       </colgroup>
+	       <thead>
+		  <tr>
+		     <th rowspan="2">Hospodářský</br>soubor</th>
+		     <th rowspan="2">Věk</th>
+		     <th rowspan="2">Zakmenění</th>
+		     <th rowspan="2">Dřevina</th>
+		     <th rowspan="2">Zastoupení</br>%</th>
+		     <th rowspan="2">Výpočetní</br>tlouštka</br>cm</th>
+		     <th rowspan="2">Výška</br>m</th>
+		     <th rowspan="2">Objem</br>středního</br>kmene</th>
+		     <th rowspan="2">Bonita</br>absolutní</th>
+		     <th rowspan="2">Bonita</br>relativní</th>
+		     <th rowspan="2">Genetická</br>klasifikace</th>
+		     <th colspan="2">Poškození</th>
+		     <th rowspan="2">Imise</th>
+		     <th rowspan="2">%</br>Souší</th>
+		     <th colspan="2">Zásoba</br>v m<sup>3</sup> b.k.</th>
+		     <th colspan="4">Těžba výchovná</th>
+		     <th colspan="2">Těžbai</br>obnovní</th>
+		     <th colspan="3">Prořezávky</th>
+		     <th colspan="4">Zalesnění</th>
+		  </tr>
+		  <tr>
+		     <th>Druh</th>
+		     <th>%</th>
+		     <th>na</br>1 ha</th>
+		     <th>celkem</th>
+		     <th>naléhavost</th>
+		     <th>násobnost</th>
+		     <th>plocha</br>ha</th>
+		     <th>objem</br>m<sup>3</sup></th>
+		     <th>plocha</br>ha</th>
+		     <th>objem</br>m<sup>3</sup></th>
+		     <th>naléhavost</th>
+		     <th>násobnost</th>
+		     <th>plocha</br>ha</th>
+		     <th>Dřevina</th>
+		     <th>Druh</th>
+		     <th>Zastoupení</br>%</th>
+		     <th>Plocha</br>ha</th>
+		  </tr>
+	       </thead>
+	       <tbody>
+		  <tr>
+		     <td>${HS}</td>
+		     <td>${}</td>
+		     <td>${ZAKM}</td>
+		     <td>${DRV}</td>
+		     <td>${ZAST}</td>
+		     <td>${TL}</td>
+		     <td>${H}</td>
+		     <td>${V}</td>
+		     <td>${BA}</td>
+		     <td>${BR}</td>
+		     <td>${GEN}</td>
+		     <td>${D}</td>
+		     <td>$</td>
+		     <td>${IM}</td>
+		     <td>${S}</td>
+		     <td>${Z}</td>
+		     <td>${C}</td>
+		     <td>${NAL}</td>
+		     <td>${NAS}</td>
+		     <td>${PL}</td>
+		     <td>${OB}</td>
+		     <td>${PL}</td>
+		     <td>${OB}</td>
+		     <td>${NAL}</td>
+		     <td>${NAS}</td>
+		     <td>${PLCH}</td>
+		     <td>${DRV}</td>
+		     <td>${D}</td>
+		     <td>${ZAST}</td>
+		     <td>${PLCH}</td>
+		  </tr>
+	       </tbody>
+	       <tfoot>
+		  <tr>
+		     <td colspan="4">Etáž celkem</td>
+		     <td>${sZAST}</td>
+		     <td colspan="10"></td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td colspan="2"></td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td colspan="2"></td>
+		     <td>$sum</td>
+		     <td colspan="2"></td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		  </tr>
+		  <tr>
+		     <td colspan="4">Porostní skupina celkem</td>
+		     <td>${sZAST}</td>
+		     <td colspan="10"></td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td colspan="2"></td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		     <td colspan="2"></td>
+		     <td>$sum</td>
+		     <td colspan="2"></td>
+		     <td>$sum</td>
+		     <td>$sum</td>
+		  </tr>
+	       </tfoot>
+	    </table>
+	 </div>
+      </div>
+   </div>
+</body>
+</html>

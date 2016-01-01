@@ -1,0 +1,60 @@
+	Nebylo zjišťováno
+1	národní park - nerozlišeny zóny
+2	národní park - 1. zóna
+3	národní park - 2. zóna
+4	národní park - 3.a další zóny
+5	CHKO - nerozlišeny zóny
+6	CHKO - 1. zóna
+7	CHKO - 2. zóna
+8	CHKO - 3.a další zóny
+9	maloplošné CHÚ - nerozlišeno
+10	maloplošné ZCHÚ - NPR
+11	maloplošné ZCHÚ - PR
+12	maloplošné ZCHÚ - NPP
+13	maloplošné ZCHÚ - PP
+14	Ochranné pásmo vodního zdroje - I.stupně (dle zákona o vodách č.254/2001 Sb. v platném znění), platí i pro pásma hygienické ochrany I. stupně vylišené dle předchozí právní úpravy - zákon o vodách č.138/1973 Sb  
+15	Ochranné pásmo vodního zdroje - II.stupně - vnitřní (dle zákona o vodách č.254/2001 Sb. v platném znění)
+16	Ochranné pásmo vodního zdroje - II.stupně - vnější (dle zákona o vodách č.254/2001 Sb. v platném znění)
+17	Pásmo hygienické ochrany III.stupně (vymezeno dle zákona o vodách č.138/1973 Sb.)
+51	Pásmo hygienické ochrany II.stupně (vymezeno dle zákona o vodách č.138/1973 Sb.)
+18	CHOPAV
+19	ÚSES - nerozlišeno
+20	ÚSES - nadregionální
+21	ÚSES - regionální
+22	ÚSES - místní
+23	genová základna
+24	povodí vodárenských toků
+25	preferovaná zóna vodohosp. toků
+26	ochranné pásmo zdrojů I. stupně (dle zákona č.164/2001 Sb. v platném znění - lázeňský zákon)
+27	ochranné pásmo zdrojů II. stupně (dle zákona č.164/2001 Sb. v platném znění - lázeňský zákon)
+28	ochranná pásma léčivých a minerálních vod III. stupně
+29	registrované VKP
+30	přírodní park
+31	území klidu
+32	přechodně chráněná plocha
+33	arch. a paleontologické naleziště
+52	Archeologické naleziště
+53	Kulturní památka
+54	Památková rezervace a zóna
+34	registrované uskupení mravenišť
+35	les se zvýrazněnou zdravotně rekreační funkcí
+36	les s podporovanou rekreační funkcí (rekreační oblast, vodní nádrž, přehrada, naučná stezka)
+37	les příměstský
+38	les parkový
+39	les se zvýšenou funkcí půdoochrannou
+40	krycí porost podél objektů a linií
+41	ochranný lesní pás, zasakovací pás
+42	les se zvýšenou funkcí topoklimatickou
+43	les se zvýšenou funkcí estetickou a krajinotvornou
+44	uznané porosty kat. A
+45	uznané porosty kat. B
+46	dílčí populace místních ekotypů dřevin
+47	uznaná obora
+48	samostatná bažantnice
+49	uznaná bažantnice
+50	armáda
+99	jiný veřejný zájem
+55	evropsky významná lokalita - EVL
+56	ptačí oblast - PO
+57	smluvně chráněné území
+
