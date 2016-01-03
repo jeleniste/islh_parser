@@ -7,8 +7,8 @@ Popis
 *****
 
 Qgis plugin slouží k načtení a zobrazení dat *lesních hospodářských plánů a
-hospodářství *lesních hospodářských plánů a osnov* uložených ve `informačním
-standardu lesního hospodářství <http://www.uhul.cz/ke-stazeni/standardy/is-lhpo/129-informacni-standard-lesniho-hospodarstvi-pro-lhp-a-lho>`_.
+osnov* uložených ve `informačním standardu lesního hospodářství 
+<http://www.uhul.cz/ke-stazeni/standardy/is-lhpo/129-informacni-standard-lesniho-hospodarstvi-pro-lhp-a-lho>`_.
 Přidá vrstvy *jednotek prostorového rozdělení lesa*, tedy porostích skupin,
 jiných ploch, ostatních ploch a bezlesí, dále přidá vrstvy kartografických
 prvků, tedy KLO, KPO, KBO a KTO, tedy liniových, plošných, bodových a textových
