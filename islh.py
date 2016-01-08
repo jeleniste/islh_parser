@@ -221,6 +221,9 @@ class islh_parser:
         del(self.doc)
         del(self.root)
 
+        del(barva)
+        del(znacka)
+
         self = None
 
 
@@ -614,7 +617,7 @@ class islh_parser:
         self.iface.mapCanvas().setExtent(box)
         self.iface.mapCanvas().refresh()
 
-        self.select_psk() #workaround kvuli 
+        #self.select_psk() #workaround kvuli 
 
 
     def select_psk(self):
@@ -653,7 +656,8 @@ class islh_parser:
 
             return(None)
 
-        if len(self.psk_layer.selectedFeatures()) == 1: #musi bejt prave jeden
+        if len(self.psk_layer.selectedFeatures()) > 0: #musi bejt prave jeden
+            #kdyz je jich vic, vem prvni
             selected_psk = self.psk_layer.selectedFeatures()[0]
             self.jprl = (selected_psk['lhc_kod']
                     , selected_psk['odd']
