@@ -204,9 +204,24 @@ class islh_parser:
         # for reuse if plugin is reopened
         # Commented next statement since it causes QGIS crashe
         # when closing the docked window:
-        # self.dockwidget = None
+
+        self.dockwidget = None
 
         self.pluginIsActive = False
+
+        del(self.psk_layer)
+        del(self.klo_layer)
+        del(self.kto_layer)
+        del(self.kpo_layer)
+        del(self.kbo_layer)
+        del(self.bzl_layer)
+        del(self.jp_layer)
+        del(self.op_layer)
+
+        del(self.doc)
+        del(self.root)
+
+        self = None
 
 
     def unload(self):
@@ -598,6 +613,10 @@ class islh_parser:
         box = self.psk_layer.boundingBoxOfSelected()
         self.iface.mapCanvas().setExtent(box)
         self.iface.mapCanvas().refresh()
+
+        self.select_psk() #workaround kvuli 
+
+        self.select_psk() #workaround kvuli 
 
 
     def select_psk(self):
