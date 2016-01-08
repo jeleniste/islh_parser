@@ -616,8 +616,6 @@ class islh_parser:
 
         self.select_psk() #workaround kvuli 
 
-        self.select_psk() #workaround kvuli 
-
 
     def select_psk(self):
 
