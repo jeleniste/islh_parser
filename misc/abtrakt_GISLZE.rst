@@ -4,7 +4,7 @@ Prohlížečka LHPO v ISLH xml
 
 Představení pluginu na prohlížení dat lesních hospodářských plánů a osnov ve
 formátu XML informačního standardu lesního hospodářství. Dále nastínění
-technickou stránku samostatné řešení a pohovořit o dalších plánovaných
+technické stránky samotného řešení a přiblížení o dalších plánovaných
 vylepšeních.
 
 Plugin je napsán v programovacím jazyce python s použitím knihovny lxml,
