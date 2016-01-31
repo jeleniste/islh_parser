@@ -43,6 +43,8 @@ from qgis.core import QgsFeatureRequest, QgsGeometry, QgsMapLayerRegistry\
 
 import ciselniky
 
+import islh_geom #prevod geometrie do qgs
+
 
 class islh_parser:
     """QGIS Plugin Implementation."""
@@ -221,9 +223,6 @@ class islh_parser:
         del(self.doc)
         del(self.root)
 
-        del(barva)
-        del(znacka)
-
         self = None
 
 
@@ -271,239 +270,54 @@ class islh_parser:
                 QMessageBox.critical(QDialog()
                         ,u"vadný soubor",u"soubor se nepodařilo načíst")
 
-            #pridam skupinu
+            self.dockwidget.output_working_on.setText(u"Začínám tvořit grafiku")
+
+            self.add_layers()
+
+            self.dockwidget.output_working_on.setText(u"přidávám vrstvy do mapové kompozice")
+
             self.layerTreeRoot = QgsProject.instance().layerTreeRoot()
             self.por_mapa_group = self.layerTreeRoot.insertGroup(0, u'Porostní mapa')
-
-
-            #self.psk_layer = self.iface.addVectorLayer('MultiPolygon'
-            self.psk_layer = QgsVectorLayer('MultiPolygon'
-                    , 'PSK', 'memory')
-
-            self.psk_layer.loadNamedStyle('styles/por_mapa.qml')
-
-            #self.crs = self.psk_layer.crs()
-            #self.crs.createFromId(5514)
-            #self.psk_layer.setCrs(self.crs)
-            self.crs = QgsCoordinateReferenceSystem()
-            self.crs.createFromId(5514)
-            self.psk_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu PSK")
-
-            try:
-
-                self.populate_layer('ODD/DIL/POR/PSK', self.psk_layer)
-
-                #pridam index
-
-                self.psk_index = QgsSpatialIndex()
-                for f in self.psk_layer.getFeatures():
-                    self.psk_index.insertFeature(f)
-
-                
-                QgsMapLayerRegistry.instance().addMapLayer(self.psk_layer, False)
-                self.por_mapa_group.addLayer(self.psk_layer)
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Nevhodný formát dat",u"nepodařilo se vytvořit vrstvu PSK")
-
-
-            #kpo
-            self.kpo_layer = QgsVectorLayer('Multipolygon'
-                    , 'KPO', 'memory')
-
-            self.kpo_layer.loadNamedStyle('styles/por_mapa_kpo.qml')
-
-            self.kpo_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu KPO")
-
-            try:
-
-                self.populate_layer('KPO', self.kpo_layer)
-
-                #index nepridam, je to jen kartoska
-
-                QgsMapLayerRegistry.instance().addMapLayer(self.kpo_layer, False)
-                #self.por_mapa_group.addLayer(self.kpo_layer)
-                self.por_mapa_group.insertLayer(0, self.kpo_layer)
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření KPO",u"nepodařilo se vytvořit vrstvu KPO")
-
-            #-----
-
-            #klo
-            self.klo_layer = QgsVectorLayer('Linestring'
-                    , 'KLO', 'memory')
-
-            self.klo_layer.loadNamedStyle('styles/porostni_mapa_linie.qml')
-
-            self.klo_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu KLO")
-
-            try:
-
-                self.populate_layer('KLO', self.klo_layer)
-
-                #index nepridam, je to jen kartoska
-
-                QgsMapLayerRegistry.instance().addMapLayer(self.klo_layer, False)
-                #self.por_mapa_group.addLayer(self.klo_layer)
-                self.por_mapa_group.insertLayer(0, self.klo_layer)
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření KLO",u"nepodařilo se vytvořit vrstvu KLO")
-
-            #-----
-
-            #kbo
-            self.kbo_layer = QgsVectorLayer('MultiPoint'
-                    , 'KBO', 'memory')
-
-            self.kbo_layer.loadNamedStyle('styles/styly_body.qml')
-
-            self.kbo_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu KBO")
-
-            try:
-
-                self.populate_layer('KBO', self.kbo_layer)
-
-                #index nepridam, je to jen kartoska
-
-                QgsMapLayerRegistry.instance().addMapLayer(self.kbo_layer, False)
-                #self.por_mapa_group.addLayer(self.kbo_layer)
-                self.por_mapa_group.insertLayer(0, self.kbo_layer)
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření KBO",u"nepodařilo se vytvořit vrstvu KBO")
-
-            #-----
-
-            #kto
-            self.kto_layer = QgsVectorLayer('Point'
-                    , 'KTO', 'memory')
-
-            self.kto_layer.loadNamedStyle('styles/styly_txt.qml')
-
-            self.kto_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu KTO")
-
-            try:
-
-                self.populate_layer('KTO', self.kto_layer)
-
-                #index nepridam, je to jen kartoska
-
-                QgsMapLayerRegistry.instance().addMapLayer(self.kto_layer, False)
-                #self.por_mapa_group.addLayer(self.kto_layer)
-                self.por_mapa_group.insertLayer(0, self.kto_layer)
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření KTO",u"nepodařilo se vytvořit vrstvu KTO")
-
-            #-----
-            #BZL JP OP
-            #skupina
             self.bzl_jp_op_mapa_group = self.layerTreeRoot.insertGroup(1, u'BZL, JP, OP')
+            self.bzl_jp_op_mapa_group.setVisible(Qt.Unchecked)
 
-            #-----
+            if hasattr(self, 'psk_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.psk_layer, False)
+                self.psk_layer.loadNamedStyle('styles/por_mapa.qml')
+                self.por_mapa_group.insertLayer(0, self.psk_layer)
 
-            #bzl
-            self.bzl_layer = QgsVectorLayer('Multipolygon'
-                    , 'BZL', 'memory')
-
-            #self.psk_layer.loadNamedStyle('styles/por_mapa.qml')
-
-            self.bzl_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu BZL")
-
-
-            try:
-                self.populate_layer('ODD/DIL/POR/BZL', self.bzl_layer)
-
-                #index nepridam, je to jen kartoska
-
+            if hasattr(self, 'bzl_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.bzl_layer, False)
-                #self.por_mapa_group.addLayer(self.bzl_layer)
                 self.bzl_jp_op_mapa_group.insertLayer(0, self.bzl_layer)
 
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření BZL",u"nepodařilo se vytvořit vrstvu BZL")
+            if hasattr(self, 'jp_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.jp_layer, False)
+                self.bzl_jp_op_mapa_group.insertLayer(0, self.jp_layer)
 
+            if hasattr(self, 'op_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.op_layer, False)
+                self.bzl_jp_op_mapa_group.insertLayer(0, self.op_layer)
 
-            #------
+            if hasattr(self, 'kpo_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.kpo_layer, False)
+                self.kpo_layer.loadNamedStyle('styles/por_mapa_kpo.qml')
+                self.por_mapa_group.insertLayer(0, self.kpo_layer)
 
-            #jp
-            self.jp_layer = QgsVectorLayer('Multipolygon'
-                    , 'JP', 'memory')
+            if hasattr(self, 'klo_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.klo_layer, False)
+                self.klo_layer.loadNamedStyle('styles/porostni_mapa_linie.qml')
+                self.por_mapa_group.insertLayer(0, self.klo_layer)
 
-            #self.psk_layer.loadNamedStyle('styles/por_mapa.qml')
+            if hasattr(self, 'kbo_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.kbo_layer, False)
+                self.kbo_layer.loadNamedStyle('styles/styly_body.qml')
+                self.por_mapa_group.insertLayer(0, self.kbo_layer)
 
-            self.jp_layer.setCrs(self.crs)
+            if hasattr(self, 'kto_layer'):
+                QgsMapLayerRegistry.instance().addMapLayer(self.kto_layer, False)
+                self.kto_layer.loadNamedStyle('styles/styly_txt.qml')
+                self.por_mapa_group.insertLayer(0, self.kto_layer)
 
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu JP")
-
-
-            self.populate_layer('ODD/DIL/POR/JP', self.jp_layer)
-
-            #index nepridam, je to jen kartoska
-
-            QgsMapLayerRegistry.instance().addMapLayer(self.jp_layer, False)
-            #self.por_mapa_group.addLayer(self.jp_layer)
-            self.bzl_jp_op_mapa_group.insertLayer(0, self.jp_layer)
-            try:
-                a=1
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření JP",u"nepodařilo se vytvořit vrstvu JP")
-
-
-            #------
-
-            #op
-            self.op_layer = QgsVectorLayer('Multipolygon'
-                    , 'OP', 'memory')
-
-            #self.psk_layer.loadNamedStyle('styles/por_mapa.qml')
-
-            self.op_layer.setCrs(self.crs)
-
-            self.dockwidget.output_working_on.setText(u"generuji vrstvu OP")
-
-            #try:
-
-            self.populate_layer('ODD/DIL/POR/OP', self.op_layer)
-
-            #index nepridam, je to jen kartoska
-
-            QgsMapLayerRegistry.instance().addMapLayer(self.op_layer, False)
-            #self.por_mapa_group.addLayer(self.op_layer)
-            self.bzl_jp_op_mapa_group.insertLayer(0, self.op_layer)
-
-            try:
-                a=1
-
-            except:
-                QMessageBox.critical(QDialog()
-                        ,u"Chyba vytváření OP",u"nepodařilo se vytvořit vrstvu OP")
-
-
-            #------
-            self.bzl_jp_op_mapa_group.setVisible(Qt.Unchecked)
 
 
 
@@ -517,6 +331,110 @@ class islh_parser:
             self.select_dil()
             self.select_por()
             self.select_psk()
+            self.iface.setActiveLayer(self.psk_layer)
+
+
+
+    def add_layers(self):
+        self.dockwidget.output_working_on.setText(u"Začátek migrace geometrie")
+        psk_mustr = self.root.find('LHC/ODD/DIL/POR/PSK')
+        bzl_mustr = self.root.find('LHC/ODD/DIL/POR/BZL')
+        jp_mustr = self.root.find('LHC/ODD/DIL/POR/JP')
+        op_mustr = self.root.find('LHC/ODD/DIL/POR/OP')
+
+        self.dockwidget.output_working_on.setText(u"Vytvářím vrstvy JPRL")
+
+
+        if psk_mustr is not None:
+            self.psk_layer = islh_geom.createLayer([psk_mustr], 'PSK',['lhc_kod','odd','dil','por','etz'])
+
+        if bzl_mustr is not None:
+            self.bzl_layer = islh_geom.createLayer([bzl_mustr], 'BZL',['lhc_kod','odd','dil','por'])
+
+        if jp_mustr is not None:
+            self.jp_layer = islh_geom.createLayer([jp_mustr], 'JP',['lhc_kod','odd','dil','por'])
+
+        if op_mustr is not None:
+            self.op_layer = createLayer([op_mustr], 'OP',['lhc_kod','odd','dil','por'])
+
+        self.dockwidget.output_working_on.setText(u"Generuji vrstvy JPRL")
+
+        featureCount = len(self.root.xpath('LHC/ODD/DIL/POR'))
+        pbar = self.dockwidget.progressBar
+        pbar.setRange(0, featureCount)
+        progres = iter(range(0, featureCount + 1))
+        pbar.setValue(progres.next())
+
+        for lhc in self.root.xpath('LHC'):
+            lhc_kod = lhc.get('LHC_KOD')
+            for odd in lhc.xpath('ODD'):
+                odd_kod = odd.get('ODD')
+                for dil in odd.xpath('DIL'):
+                    dil_kod = dil.get('DIL')
+                    for por in dil.xpath('POR'):
+                        por_kod = por.get('POR')
+                        extra_attrs = {
+                                'lhc_kod':lhc_kod
+                                , 'odd':odd_kod
+                                , 'dil':dil_kod
+                                , 'por':por_kod}
+
+                        bzl_dta = por.xpath('BZL')
+                        jp_dta = por.xpath('JP')
+                        op_dta = por.xpath('OP')
+
+                        if bzl_dta:
+                            islh_geom.populateLayer(self.bzl_layer, bzl_dta, extra_attrs)
+
+                        if jp_dta:
+                            islh_geom.populateLayer(self.jp_layer, jp_dta, extra_attrs)
+
+                        if op_dta:
+                            islh_geom.populateLayer(self.op_layer, op_dta, extra_attrs)
+
+                        for psk in por.xpath('PSK'):
+                            etz = \
+                            json.dumps([dict(etz.attrib) for etz in psk.xpath('ETZ')])
+                            
+                            extra_attrs = {
+                                    'lhc_kod':lhc_kod
+                                    , 'odd':odd_kod
+                                    , 'dil':dil_kod
+                                    , 'por':por_kod
+                                    , 'etz':etz}
+                                    
+                            islh_geom.populateLayer(self.psk_layer, [psk], extra_attrs)
+
+                        pbar.setValue(progres.next())
+
+        self.dockwidget.output_working_on.setText(u"Vytvářím karto vrstvy")
+
+        self.klo_layer = islh_geom.createLayer([self.root.find('LHC/KLO')], 'klo')
+        self.kbo_layer = islh_geom.createLayer([self.root.find('LHC/KBO')], 'kbo')
+        self.kpo_layer = islh_geom.createLayer([self.root.find('LHC/KPO')], 'kpo')
+        self.kto_layer = islh_geom.createLayer([self.root.find('LHC/KTO')], 'kto')
+
+        self.dockwidget.output_working_on.setText(u"Nahrávám data do karto vrstev")
+        self.dockwidget.output_working_on.setText(u"Nahrávám data do vrstvy KLO")
+        islh_geom.populateLayer(self.klo_layer, self.root.xpath('LHC/KLO'), {}, self.dockwidget.progressBar)
+        self.dockwidget.output_working_on.setText(u"Nahrávám data do vrstvy KBO")
+        islh_geom.populateLayer(self.kbo_layer, self.root.xpath('LHC/KBO'), {}, self.dockwidget.progressBar)
+        self.dockwidget.output_working_on.setText(u"Nahrávám data do vrstvy KPO")
+        islh_geom.populateLayer(self.kpo_layer, self.root.xpath('LHC/KPO'), {}, self.dockwidget.progressBar)
+        self.dockwidget.output_working_on.setText(u"Nahrávám data do vrstvy KTO")
+        islh_geom.populateLayer(self.kto_layer, self.root.xpath('LHC/KTO'), {}, self.dockwidget.progressBar)
+
+        if 'PSK_ZNACKA' not in [f.name() for f in self.psk_layer.pendingFields()]:
+            self.psk_layer.addExpressionField('znacka(etz)', QgsField('PSK_ZNACKA',QVariant.Int))
+
+
+        self.dockwidget.output_working_on.setText(u"Hotovo")
+
+
+
+
+
+
 
     def select_lhc(self):
         self.dockwidget.input_odd.clear()
@@ -616,8 +534,6 @@ class islh_parser:
         box = self.psk_layer.boundingBoxOfSelected()
         self.iface.mapCanvas().setExtent(box)
         self.iface.mapCanvas().refresh()
-
-        #self.select_psk() #workaround kvuli 
 
 
     def select_psk(self):
@@ -878,67 +794,67 @@ class islh_parser:
             layer.addExpressionField('znacka(etz)', QgsField('PSK_ZNACKA',QVariant.Int))
 
             
-    #------------------------------------
-    ##geometry
-    @staticmethod
-    def parse_geometry(gr):
-        """node s ISLH grafikou"""
-
-        g = gr[0] #obraz ma jen jeden prvek
-
-        geom = (
-                QgsGeometry.fromPoint(islh_parser.parse_point(g)) if g.tag == 'B'
-                else QgsGeometry.fromPolyline(islh_parser.parse_line(g)) if g.tag == 'L'
-                else QgsGeometry.fromMultiPoint(islh_parser.parse_multipoint(g)) if g.tag == 'MB'
-                else QgsGeometry.fromMultiPolyline(islh_parser.parse_multiline(g)) if g.tag == 'ML'
-                else QgsGeometry.fromPolygon(islh_parser.parse_polygon(g)) if g.tag == 'P'
-                else QgsGeometry.fromMultiPolygon(islh_parser.parse_multipolygon(g)) if g.tag == 'MP' 
-                else None) 
-
-        return(geom)
-
-    @staticmethod
-    def parse_point(p):
-        """udělá z bodu ogr bod"""
-
-        (y,x) = map(lambda x: -float(x), p.get('S').split('$'))
-        return(
-                QgsPoint(x,y)
-                )
-
-    @staticmethod
-    def parse_line(l):
-        """udělá z bodu ogr bod"""
-
-        return(
-                [islh_parser.parse_point(point) for point in l.xpath('B')]
-                )
-
-    @staticmethod
-    def parse_multipoint(l):
-
-        return(
-                [islh_parser.parse_point(point) for point in l.xpath('B')]
-                )
-
-    @staticmethod
-    def parse_multiline(p):
-
-        return(
-                [islh_parser.parse_line(line) for line in p.xpath('L')]
-                )
-
-    @staticmethod
-    def parse_polygon(p):
-
-        return(
-                [islh_parser.parse_line(line) for line in p.xpath('L')]
-                )
-
-
-    @staticmethod
-    def parse_multipolygon(p):
-        return(
-                [islh_parser.parse_polygon(polygon) for polygon in p.xpath('P')]
-                )
-
+#    #------------------------------------
+#    ##geometry
+#    @staticmethod
+#    def parse_geometry(gr):
+#        """node s ISLH grafikou"""
+#
+#        g = gr[0] #obraz ma jen jeden prvek
+#
+#        geom = (
+#                QgsGeometry.fromPoint(islh_parser.parse_point(g)) if g.tag == 'B'
+#                else QgsGeometry.fromPolyline(islh_parser.parse_line(g)) if g.tag == 'L'
+#                else QgsGeometry.fromMultiPoint(islh_parser.parse_multipoint(g)) if g.tag == 'MB'
+#                else QgsGeometry.fromMultiPolyline(islh_parser.parse_multiline(g)) if g.tag == 'ML'
+#                else QgsGeometry.fromPolygon(islh_parser.parse_polygon(g)) if g.tag == 'P'
+#                else QgsGeometry.fromMultiPolygon(islh_parser.parse_multipolygon(g)) if g.tag == 'MP' 
+#                else None) 
+#
+#        return(geom)
+#
+#    @staticmethod
+#    def parse_point(p):
+#        """udělá z bodu ogr bod"""
+#
+#        (y,x) = map(lambda x: -float(x), p.get('S').split('$'))
+#        return(
+#                QgsPoint(x,y)
+#                )
+#
+#    @staticmethod
+#    def parse_line(l):
+#        """udělá z bodu ogr bod"""
+#
+#        return(
+#                [islh_parser.parse_point(point) for point in l.xpath('B')]
+#                )
+#
+#    @staticmethod
+#    def parse_multipoint(l):
+#
+#        return(
+#                [islh_parser.parse_point(point) for point in l.xpath('B')]
+#                )
+#
+#    @staticmethod
+#    def parse_multiline(p):
+#
+#        return(
+#                [islh_parser.parse_line(line) for line in p.xpath('L')]
+#                )
+#
+#    @staticmethod
+#    def parse_polygon(p):
+#
+#        return(
+#                [islh_parser.parse_line(line) for line in p.xpath('L')]
+#                )
+#
+#
+#    @staticmethod
+#    def parse_multipolygon(p):
+#        return(
+#                [islh_parser.parse_polygon(polygon) for polygon in p.xpath('P')]
+#                )
+#
