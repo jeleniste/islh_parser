@@ -14,7 +14,7 @@ version=0.1
 author=Jelen
 email=godzilalalala@gmail.com
 
-about=Umožňuje zobrazovat a procházet data z Informačního standatu lesního hospodářství.
+about=Umožňuje zobrazovat a procházet data z Informačního standartu lesního hospodářství.
 
 tracker=https://github.com/jeleniste
 repository=https://github.com/jeleniste
