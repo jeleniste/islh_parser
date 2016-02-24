@@ -276,50 +276,71 @@ class islh_parser:
 
             self.dockwidget.output_working_on.setText(u"přidávám vrstvy do mapové kompozice")
 
+            self.dockwidget.progressBar.setRange(0,8)
+            self.dockwidget.progressBar.setValue(0)
+
             self.layerTreeRoot = QgsProject.instance().layerTreeRoot()
             self.por_mapa_group = self.layerTreeRoot.insertGroup(0, u'Porostní mapa')
             self.bzl_jp_op_mapa_group = self.layerTreeRoot.insertGroup(1, u'BZL, JP, OP')
-            self.bzl_jp_op_mapa_group.setVisible(Qt.Unchecked)
+
+            #self.iface.mapCanvas().setRenderFlag(False)
+
 
             if hasattr(self, 'psk_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.psk_layer, False)
                 self.psk_layer.loadNamedStyle('styles/por_mapa.qml')
                 self.por_mapa_group.insertLayer(0, self.psk_layer)
 
+            self.dockwidget.progressBar.setValue(1)
+
             if hasattr(self, 'bzl_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.bzl_layer, False)
                 self.bzl_jp_op_mapa_group.insertLayer(0, self.bzl_layer)
+
+            self.dockwidget.progressBar.setValue(2)
 
             if hasattr(self, 'jp_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.jp_layer, False)
                 self.bzl_jp_op_mapa_group.insertLayer(0, self.jp_layer)
 
+            self.dockwidget.progressBar.setValue(3)
+
             if hasattr(self, 'op_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.op_layer, False)
                 self.bzl_jp_op_mapa_group.insertLayer(0, self.op_layer)
+
+            self.dockwidget.progressBar.setValue(4)
 
             if hasattr(self, 'kpo_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.kpo_layer, False)
                 self.kpo_layer.loadNamedStyle('styles/por_mapa_kpo.qml')
                 self.por_mapa_group.insertLayer(0, self.kpo_layer)
 
+            self.dockwidget.progressBar.setValue(5)
+
             if hasattr(self, 'klo_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.klo_layer, False)
                 self.klo_layer.loadNamedStyle('styles/porostni_mapa_linie.qml')
                 self.por_mapa_group.insertLayer(0, self.klo_layer)
+
+            self.dockwidget.progressBar.setValue(6)
 
             if hasattr(self, 'kbo_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.kbo_layer, False)
                 self.kbo_layer.loadNamedStyle('styles/styly_body.qml')
                 self.por_mapa_group.insertLayer(0, self.kbo_layer)
 
+            self.dockwidget.progressBar.setValue(7)
+
             if hasattr(self, 'kto_layer'):
                 QgsMapLayerRegistry.instance().addMapLayer(self.kto_layer, False)
                 self.kto_layer.loadNamedStyle('styles/styly_txt.qml')
                 self.por_mapa_group.insertLayer(0, self.kto_layer)
 
+            self.dockwidget.progressBar.setValue(8)
 
-
+            self.bzl_jp_op_mapa_group.setVisible(Qt.Unchecked)
+            #self.por_mapa_group.setVisible(Qt.Unchecked)
 
             lhc_list = [self.lhc.get('LHC_KOD')]
             self.dockwidget.input_lhc.clear()
@@ -333,7 +354,8 @@ class islh_parser:
             self.select_psk()
             self.iface.setActiveLayer(self.psk_layer)
 
-
+            #self.iface.mapCanvas().zoomScale(5000)
+            #self.por_mapa_group.setVisible(Qt.Checked)
 
     def add_layers(self):
         self.dockwidget.output_working_on.setText(u"Začátek migrace geometrie")
@@ -355,7 +377,7 @@ class islh_parser:
             self.jp_layer = islh_geom.createLayer([jp_mustr], 'JP',['lhc_kod','odd','dil','por'])
 
         if op_mustr is not None:
-            self.op_layer = createLayer([op_mustr], 'OP',['lhc_kod','odd','dil','por'])
+            self.op_layer = islh_geom.createLayer([op_mustr], 'OP',['lhc_kod','odd','dil','por'])
 
         self.dockwidget.output_working_on.setText(u"Generuji vrstvy JPRL")
 
