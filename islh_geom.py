@@ -125,7 +125,7 @@ def islhToWkt(islh_obraz):
                 )
     elif obraz.tag == 'P':
         return(
-                'POLYGON ' + islh_multipolygon(obraz)
+                'POLYGON ' + islh_polygon(obraz)
                 )                  
     elif obraz.tag == 'MB':
         return(
