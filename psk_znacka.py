@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import simplejson as json
+#import simplejson as json
+import json
+from math import floor
 
 ##TODO prepsat na etaz v jsonu kvuli pouziti na vyrazy u vrstvy psk
 
@@ -28,7 +30,7 @@ class psk_znacka():
 
     @staticmethod
     def vekova_trida(vek):
-        return(min((vek + 19), 179) /20)
+        return(floor(min((vek + 19), 179) /20))
 
     def spocti_znacku(self):
         """spocita znacku"""
@@ -41,7 +43,7 @@ class psk_znacka():
 #        20000 + Min((A+19),  179) div 20
 
         if len(self.etaze) == 1: #jedina etaz
-            etaz = self.etaze[self.etaze.keys()[0]]
+            etaz = self.etaze[list(self.etaze.keys())[0]]
             vekova_trida = psk_znacka.vekova_trida(etaz['VEK'])
             zakmeneni = etaz['ZAKM']
             self.psk_znacka = vekova_trida + (
@@ -58,7 +60,7 @@ class psk_znacka():
                 return(None)
 
 
-            klice = self.etaze.keys()
+            klice = list(self.etaze.keys())
 
 
             # a je etaz s vetsim zakmenenim

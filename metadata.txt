@@ -7,14 +7,14 @@
 # This file should be included when you package your plugin.# Mandatory items:
 
 [general]
-name=Prohlížečka dat LHPO
-qgisMinimumVersion=2.12
-description=Display data from forest plan format
-version=0.1
-author=Jelen
+name=ISLH parser
+qgisMinimumVersion=3.0
+description=načte a zobrazí formát ISLH
+version=2.0
+author=Jan Michálek (Je;)
 email=godzilalalala@gmail.com
 
-about=Umožňuje zobrazovat a procházet data z Informačního standartu lesního hospodářství.
+about=Načte formát ISLH (informační standard lesního hospodářství), přidá vrstvy do mapové kompozice a nastyluje je jeako porostní mapu. Umožňuje procházet datovou strukturou a zabrazovat hospodářskou knihu pro porostní skupiny.
 
 tracker=https://github.com/jeleniste
 repository=https://github.com/jeleniste
@@ -26,9 +26,9 @@ repository=https://github.com/jeleniste
 # changelog=
 
 # Tags are comma separated with spaces allowed
-tags=xml, cartography, islh, forestry
+tags=python, forestry, xml, lxml
 
-homepage=http://www.gismentors.cz/mentors/michalek/
+homepage=https://github.com/jeleniste
 category=Plugins
 icon=icon.png
 # experimental flag

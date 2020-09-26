@@ -1,11 +1,11 @@
 #/***************************************************************************
-# islh_parser
+# islhParser
 #
-# Display data from forest plan format
+# načte a zobrazí formát ISLH
 #							 -------------------
-#		begin				: 2015-12-18
+#		begin				: 2018-11-27
 #		git sha				: $Format:%H$
-#		copyright			: (C) 2015 by Jelen
+#		copyright			: (C) 2018 by Jan Michálek (Je;)
 #		email				: godzilalalala@gmail.com
 # ***************************************************************************/
 #
@@ -38,17 +38,19 @@ LOCALES =
 # translation
 SOURCES = \
 	__init__.py \
-	islh.py islh_dockwidget.py
+	islh_parser.py islh_parser_dockwidget.py
 
 PLUGINNAME = islh_parser
 
 PY_FILES = \
 	__init__.py \
-	islh.py islh_dockwidget.py
+	islh_parser.py islh_parser_dockwidget.py
 
-UI_FILES = islh_dockwidget_base.ui
+UI_FILES = islh_parser_dockwidget_base.ui
 
 EXTRAS = metadata.txt icon.png
+
+EXTRA_DIRS =
 
 COMPILED_RESOURCE_FILES = resources.py
 
@@ -72,7 +74,7 @@ default: compile
 compile: $(COMPILED_RESOURCE_FILES)
 
 %.py : %.qrc $(RESOURCES_SRC)
-	pyrcc4 -o $*.py  $<
+	pyrcc5 -o $*.py  $<
 
 %.qm : %.ts
 	$(LRELEASE) $<
@@ -110,6 +112,9 @@ deploy: compile doc transcompile
 	cp -vf $(EXTRAS) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr i18n $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)
 	cp -vfr $(HELP) $(HOME)/$(QGISDIR)/python/plugins/$(PLUGINNAME)/help
+	# Copy extra directories if any
+	(foreach EXTRA_DIR,(EXTRA_DIRS), cp -R (EXTRA_DIR) (HOME)/(QGISDIR)/python/plugins/(PLUGINNAME)/;)
+
 
 # The dclean target removes compiled python files from plugin directory
 # also deletes any .git entry

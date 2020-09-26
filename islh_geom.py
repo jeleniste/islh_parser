@@ -1,5 +1,5 @@
 from qgis.core import QgsVectorLayer, QgsFeature, QgsField, QgsGeometry
-from PyQt4.QtCore import QVariant
+from PyQt5.QtCore import QVariant
 
 def createLayer(data, lname='default', extra_attrs=[]):
     feature = data[0]
@@ -47,14 +47,14 @@ def populateLayer(layer, data, extra_attrs={}, pbar = None):
         featureCount = len(data)
         pbar.setRange(0, featureCount)
         progres = iter(range(0, featureCount + 1))
-        pbar.setValue(progres.next())
+        pbar.setValue(next(progres))
 
     
     feature_list = []
     
     pr = layer.dataProvider()
     
-    attnames = [f.name() for f in layer.pendingFields()\
+    attnames = [f.name() for f in layer.fields()\
             if f.name() not in extra_attrs.keys()]
     
     
@@ -77,12 +77,12 @@ def populateLayer(layer, data, extra_attrs={}, pbar = None):
         feature.setAttributes(
                 [item.get(a) for a in attnames] +\
                         [extra_attrs[a] for a in\
-                        [x.name() for x in layer.pendingFields()] \
+                        [x.name() for x in layer.fields()] \
                         if a in extra_attrs.keys()]
                 )   
         
         feature_list.append(feature)
-        if pbar is not None: pbar.setValue(progres.next())
+        if pbar is not None: pbar.setValue(next(progres))
         
         
     pr.addFeatures(feature_list)

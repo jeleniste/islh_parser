@@ -1,5 +1,5 @@
 from qgis.utils import qgsfunction
-from psk_znacka import psk_znacka
+from .psk_znacka import psk_znacka
 
 @qgsfunction(args='auto', group='islh_parser')
 def znacka(etz, feature, parent):

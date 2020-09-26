@@ -9,16 +9,16 @@
 """
 
 __author__ = 'godzilalalala@gmail.com'
-__date__ = '2015-12-18'
-__copyright__ = 'Copyright 2015, Jelen'
+__date__ = '2018-11-27'
+__copyright__ = 'Copyright 2018, Jan Michálek (Je;)'
 
 import unittest
 
-from PyQt4.QtGui import QIcon
+from PyQt5.QtGui import QIcon
 
 
 
-class islh_parserDialogTest(unittest.TestCase):
+class islhParserDialogTest(unittest.TestCase):
     """Test rerources work."""
 
     def setUp(self):
@@ -31,12 +31,12 @@ class islh_parserDialogTest(unittest.TestCase):
 
     def test_icon_png(self):
         """Test we can click OK."""
-        path = ':/plugins/islh_parser/icon.png'
+        path = ':/plugins/islhParser/icon.png'
         icon = QIcon(path)
         self.assertFalse(icon.isNull())
 
 if __name__ == "__main__":
-    suite = unittest.makeSuite(islh_parserResourcesTest)
+    suite = unittest.makeSuite(islhParserResourcesTest)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
 
