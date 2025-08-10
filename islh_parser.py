@@ -660,7 +660,7 @@ class islhParser:
                 , POR="'%s'"%self.jprl[3]
                 , PSK="'%s'"%self.jprl[4])
 
-        self.hk_widget.webView.setHtml(
+        self.hk_widget.webEngineView.setHtml(
                 etree.tostring(self.result, encoding = 'unicode')
                 )
 
